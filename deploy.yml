@@ -1,21 +1,19 @@
-name: Deploy with Client ID
-on: [push]  # Runs on every git push
+name: Deploy with Client ID Injection
+on: [push]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout your code
       - uses: actions/checkout@v4
 
-      # Step 2: Inject Client ID from Secrets
-      - name: Replace placeholder with Client ID
+      - name: Inject Client ID
         run: |
           sed -i "s|CLIENT_ID_PLACEHOLDER|${{ secrets.CLIENT_ID }}|g" auth.js
+          echo "Client ID injected successfully"
 
-      # Step 3: Deploy to GitHub Pages
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./   # Or your build folder (e.g., 'dist/')
+          publish_dir: ./
